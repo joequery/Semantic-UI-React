@@ -16,8 +16,7 @@ export const useCopyToClipboard = (value, timeout = 3000) => {
   return [active, onCopy]
 }
 
-export const CopyToClipboard = (props) => {
-  const { children, timeout, value } = props
+export const CopyToClipboard = ({ children, value, timeout = 3000 }) => {
   const [active, onCopy] = useCopyToClipboard(value, timeout)
 
   return children(active, onCopy)
@@ -27,10 +26,6 @@ CopyToClipboard.propTypes = {
   children: PropTypes.func.isRequired,
   timeout: PropTypes.number,
   value: PropTypes.string.isRequired,
-}
-
-CopyToClipboard.defaultProps = {
-  timeout: 3000,
 }
 
 export default CopyToClipboard
