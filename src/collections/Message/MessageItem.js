@@ -14,11 +14,13 @@ import {
  * A message list can contain an item.
  */
 const MessageItem = React.forwardRef(function (props, ref) {
-  const { children, className, content } = props
+  const defaultProps = { as: 'li' }
+  const mergedProps = { ...defaultProps, ...props }
+  const { children, className, content } = mergedProps
 
   const classes = cx('content', className)
-  const rest = getUnhandledProps(MessageItem, props)
-  const ElementType = getElementType(MessageItem, props)
+  const rest = getUnhandledProps(MessageItem, mergedProps)
+  const ElementType = getElementType(MessageItem, mergedProps)
 
   return (
     <ElementType {...rest} className={classes} ref={ref}>
@@ -40,10 +42,6 @@ MessageItem.propTypes = {
 
   /** Shorthand for primary content. */
   content: customPropTypes.contentShorthand,
-}
-
-MessageItem.defaultProps = {
-  as: 'li',
 }
 
 MessageItem.create = createShorthandFactory(MessageItem, (content) => ({ content }))
