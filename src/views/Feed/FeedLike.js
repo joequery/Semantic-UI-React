@@ -9,11 +9,13 @@ import Icon from '../../elements/Icon'
  * A feed can contain a like element.
  */
 const FeedLike = React.forwardRef(function (props, ref) {
-  const { children, className, content, icon } = props
+  const defaultProps = { as: 'a' }
+  const mergedProps = { ...defaultProps, ...props }
+  const { children, className, content, icon } = mergedProps
 
   const classes = cx('like', className)
-  const rest = getUnhandledProps(FeedLike, props)
-  const ElementType = getElementType(FeedLike, props)
+  const rest = getUnhandledProps(FeedLike, mergedProps)
+  const ElementType = getElementType(FeedLike, mergedProps)
 
   if (!childrenUtils.isNil(children)) {
     return (
@@ -30,10 +32,6 @@ const FeedLike = React.forwardRef(function (props, ref) {
     </ElementType>
   )
 })
-
-FeedLike.defaultProps = {
-  as: 'a',
-}
 
 FeedLike.displayName = 'FeedLike'
 FeedLike.propTypes = {
