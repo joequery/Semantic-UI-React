@@ -15,6 +15,30 @@ import PaginationItem from './PaginationItem'
  * A component to render a pagination.
  */
 const Pagination = React.forwardRef(function (props, ref) {
+  const defaultProps = {
+    'aria-label': 'Pagination Navigation',
+    boundaryRange: 1,
+    ellipsisItem: '...',
+    firstItem: {
+      'aria-label': 'First item',
+      content: '«',
+    },
+    lastItem: {
+      'aria-label': 'Last item',
+      content: '»',
+    },
+    nextItem: {
+      'aria-label': 'Next item',
+      content: '⟩',
+    },
+    pageItem: {},
+    prevItem: {
+      'aria-label': 'Previous item',
+      content: '⟨',
+    },
+    siblingRange: 1,
+  }
+  const mergedProps = { ...defaultProps, ...props }
   const {
     'aria-label': ariaLabel,
     boundaryRange,
@@ -22,10 +46,10 @@ const Pagination = React.forwardRef(function (props, ref) {
     ellipsisItem,
     siblingRange,
     totalPages,
-  } = props
+  } = mergedProps
   const [activePage, setActivePage] = useAutoControlledValue({
-    state: props.activePage,
-    defaultState: props.defaultActivePage,
+    state: mergedProps.activePage,
+    defaultState: mergedProps.defaultActivePage,
     initialState: 1,
   })
 
@@ -38,7 +62,7 @@ const Pagination = React.forwardRef(function (props, ref) {
     }
 
     setActivePage(nextActivePage)
-    _.invoke(props, 'onPageChange', e, { ...props, activePage: nextActivePage })
+    _.invoke(mergedProps, 'onPageChange', e, { ...mergedProps, activePage: nextActivePage })
   }
 
   const handleItemOverrides = (active, type, value) => (predefinedProps) => ({
@@ -61,12 +85,12 @@ const Pagination = React.forwardRef(function (props, ref) {
     siblingRange,
     totalPages,
   })
-  const rest = getUnhandledProps(Pagination, props)
+  const rest = getUnhandledProps(Pagination, mergedProps)
 
   return (
     <Menu {...rest} aria-label={ariaLabel} pagination role='navigation' ref={ref}>
       {_.map(items, ({ active, type, value }) =>
-        PaginationItem.create(props[type], {
+        PaginationItem.create(mergedProps[type], {
           defaultProps: {
             content: value,
             disabled,
@@ -127,30 +151,6 @@ Pagination.propTypes = {
 
   /** Total number of pages. */
   totalPages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-}
-
-Pagination.defaultProps = {
-  'aria-label': 'Pagination Navigation',
-  boundaryRange: 1,
-  ellipsisItem: '...',
-  firstItem: {
-    'aria-label': 'First item',
-    content: '«',
-  },
-  lastItem: {
-    'aria-label': 'Last item',
-    content: '»',
-  },
-  nextItem: {
-    'aria-label': 'Next item',
-    content: '⟩',
-  },
-  pageItem: {},
-  prevItem: {
-    'aria-label': 'Previous item',
-    content: '⟨',
-  },
-  siblingRange: 1,
 }
 
 Pagination.Item = PaginationItem
