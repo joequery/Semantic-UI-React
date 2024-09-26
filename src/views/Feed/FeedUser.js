@@ -8,10 +8,12 @@ import { childrenUtils, customPropTypes, getElementType, getUnhandledProps } fro
  * A feed can contain a user element.
  */
 const FeedUser = React.forwardRef(function (props, ref) {
-  const { children, className, content } = props
+  const defaultProps = { as: 'a' }
+  const mergedProps = { ...defaultProps, ...props }
+  const { children, className, content } = mergedProps
   const classes = cx('user', className)
-  const rest = getUnhandledProps(FeedUser, props)
-  const ElementType = getElementType(FeedUser, props)
+  const rest = getUnhandledProps(FeedUser, mergedProps)
+  const ElementType = getElementType(FeedUser, mergedProps)
 
   return (
     <ElementType {...rest} className={classes} ref={ref}>
@@ -33,10 +35,6 @@ FeedUser.propTypes = {
 
   /** Shorthand for primary content. */
   content: customPropTypes.contentShorthand,
-}
-
-FeedUser.defaultProps = {
-  as: 'a',
 }
 
 export default FeedUser
